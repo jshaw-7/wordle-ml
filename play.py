@@ -4,7 +4,7 @@ import random
 
 import string
 import re
-from collections import Counter
+from collections import Counterπ
 from tqdm import tqdm
 
 import colorama
