@@ -4,11 +4,10 @@ import random
 
 import string
 import re
-from collections import Counterπ
-from tqdm import tqdm
 
 import colorama
 from colorama import Fore
+import helpers
 
 with open('wordle-allowed-guesses.txt', 'r') as f:
     allowed = f.read().splitlines()
@@ -16,19 +15,17 @@ with open('wordle-answers-alphabetical.txt','r') as f:
     answers = f.read().splitlines()
 allowed += answers
 
-starting_words = ['saint', 'saner', 'shied', 'crier', 'cried', 'sleek', 'sleep', 'sleet', 
-                 'slant', 'slang', 'brief', 'slash', 'siren', 'slain', 'sling', 'slink', 
-                 'surer', 'sooty', 'sooth', 'slack']
+top_starting_words = helpers.getTopWords()
 
 def get_guess(words, answers):
     guess = ''
     correct = 0
     while correct == 0:
-        guess = input('input a 5-letter word: ')
+        guess = input(Fore.RESET + 'input a 5-letter word: ')
         if len(guess) != 5:
-            print('word must be 5 letters.')
+            print(Fore.RESET + 'word must be 5 letters.')
         elif (guess not in words):
-            print('please input a real word.')
+            print(Fore.RESET + 'please input a real word.')
         else:
             correct = 7
     return guess
@@ -47,11 +44,11 @@ def check_word(guess, status, choice):
 def print_word(guess, status):
     for i in range(5):
         if status[i] == 2:
-            print(Fore.GREEN + guess[i])
+            print(Fore.GREEN + guess[i], end = '')
         elif status[i] == 1:
-            print(Fore.YELLOW + guess[i])
+            print(Fore.YELLOW + guess[i], end = '')
         else:
-            print(Fore.RED + guess[i])
+            print(Fore.RED + guess[i], end = '')
     print()
 
 def play(choice):
@@ -60,7 +57,7 @@ def play(choice):
     won = False
     
     print(Fore.GREEN + "this is WORDLE!")
-    print("you have 6 tries to guess the 5-letter word i'm thinking of ... ")
+    print(Fore.RESET + "you have 6 tries to guess the 5-letter word i'm thinking of ... ")
 
     for i in range(6):
         attempts +=1
@@ -106,13 +103,13 @@ def update_possible(possible, guess, result):
     return [word for word in possible if get_result(guess, word) == result]
 
 def make_guess(possible, guess):
-    for i in range(20):
-        if starting_words[i] in possible:
-            return starting_words[i]
+    for i in range(len(top_starting_words)):
+        if top_starting_words[i] in possible:
+            return top_starting_words[i]
     return random.choice(possible)
 
 
-choice = answers[random.randint(0, 6)]
+choice = answers[random.randint(0, len(answers))]
 print(choice)
 
 player, won = play(choice)

@@ -92,3 +92,7 @@ answers_letter_positions['rank'] = range(1,len(answers_letter_positions)+1)
 letters.append('total_rank')
 answers_letter_positions.drop(columns = letters, inplace = True)
 print(answers_letter_positions.head(20))
+topWords = answers_letter_positions.index.tolist()
+for i in range(len(topWords)):
+    topWords[i] = str(topWords[i][0])
+print(topWords)
